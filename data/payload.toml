@@ -1,0 +1,52 @@
+[logging]
+
+[[breakpoints]]
+related_unit = "dummy1"
+break_mode = "s"
+storage = "dummy1.zarr"
+store_params = { }
+
+[[workflow]]
+module = "EOTriggering"
+processing_unit = "dummy_processing_unit"
+name = "dummy1"
+inputs = [ "S3SLSLST" ]
+
+[[workflow.parameters.aux_files]]
+id = "OSF"
+path = "data/S3B_ADF_OSFAX_20180425T191855_99991231T235959_20220330T082325"
+store_type = "zarr"
+store_params = { }
+
+[[workflow.parameters.aux_files]]
+id = "PCP"
+path = "data/S3B_ADF_SL2PP_20180425T000000_20991231T235959_20231107T172757.json"
+store_type = "json"
+store_params = { }
+
+[[workflow]]
+module = "EOTriggering"
+processing_unit = "dummy_processing_unit"
+name = "dummy2"
+inputs = [ "dummy1" ]
+parameters = { }
+
+["I/O"]
+modification_mode = "newproduct"
+
+  [["I/O".inputs_products]]
+  id = "S3SLSLST"
+  path = "data/S3SLSLST_20191227T124111_0179_A109_T921.zarr"
+  store_type = "zarr"
+  store_params = { }
+
+  ["I/O".output_product]
+  id = "output"
+  path = "output.zarr"
+  store_type = "zarr"
+  store_params = { }
+
+[dask_context]
+cluster_type = "local"
+cluster_config = { }
+client_config = { }
