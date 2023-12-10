@@ -66,7 +66,7 @@ function run(file::String)
         mod = pu["module"]
         process = pu["processing_unit"]
         params = pu["parameters"]
-        println(params)
+        # println(params)
         try
             m = getfield(Main,Symbol(mod))
             fn = getfield(m,Symbol(process))
