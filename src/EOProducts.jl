@@ -1,8 +1,19 @@
-module EOProduct
+module EOProducts
 
-export eoproduct_dataset
+export eoproduct_dataset,EOProduct
 
 using YAXArrays, Zarr
+
+mutable struct EOProduct
+    name::String
+    path::String
+    manifest::Dict{String,Any}
+    datasets::Dict{String,YAXArrays.Datasets.Dataset}
+    type::String
+    mapping::Dict{String,String}
+end
+
+
 
 function iter_groups!(vars::Dict{String,ZArray},z::ZGroup)
     if isempty(z.groups)
@@ -49,7 +60,7 @@ returns a Dict{String,Dataset} containing all the Variables stored in the produc
 julia> d = open_eoproduct("S3SLSLST_20191227T124111_0179_A109_T921.zarr")
 ```
 """
-function eoproduct_dataset(path::String)
+function eoproduct_dataset(path::String)::Dict{String,Dataset}
     # Check path exist
     if !isdir(path)
         @error "Product Path does not exist ", path
@@ -87,6 +98,19 @@ function eoproduct_dataset(path::String)
     return eo_product
 end
 
+
+function EOProduct(name::String,path::String)
+    manifest = zopen(path).attrs
+    datasets = eoproduct_dataset(path)
+    type = splitpath(path)[end][1:8]
+    mapping = Dict{String,String}()
+    EOProduct(name,path,manifest,datasets,type,mapping)
+end
+
+function Base.getindex(product::EOProduct,path::String)::Dataset
+    return product.datasets[path]
+end
+
 function image_to_instrument(image::YAXArray,indices::YAXArray...)
     
     scan=indices[1] .+1 .- minimum(skipmissing(indices[1]))
@@ -109,4 +133,4 @@ function image_to_instrument(image::YAXArray,indices::YAXArray...)
     end
 end
 
-end # module EOProduct
+end # module EOProducts

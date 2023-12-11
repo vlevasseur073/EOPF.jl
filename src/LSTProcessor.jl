@@ -1,14 +1,15 @@
 module LSTProcessor
 
+import ..EOProducts: EOProduct
 
-function slstr_common(inputs::Vector{Pair{String,Dict}},args::Dict{String,Any})#::YAXArrays.Dataset
+function slstr_common(inputs::Vector{EOProduct},args::Dict{String,Any})#::YAXArrays.Dataset
 
 end
-function lst_processor(inputs::Vector{Pair{String,Dict}},args::Dict{String,Any})#::YAXArrays.Dataset
+function lst_processor(inputs::Vector{EOProduct},args::Dict{String,Any})#::YAXArrays.Dataset
     @info "Starting LST Processor"
-    for (path,input) in inputs
-        @info "Input ", path
-    end
+    # for p in inputs
+    #     @info "Input ", p
+    # end
 
     @info args
     common = slstr_common(inputs,args)
