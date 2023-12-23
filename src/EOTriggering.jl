@@ -19,6 +19,20 @@ struct Payload
     logging
 end
 
+struct PayloadWorkflow
+    mod::String
+    processing_unit::String
+    name::String
+    inputs::Vector{String}
+    function PayloadWorkflow(d::Dict)
+        mod=d["module"]
+        processing_unit=d["processing_unit"]
+        name=d["name"]
+        inputs=d["inputs"]
+        new(mod,processing_unit,name,inputs)
+    end
+end
+
 function dummy_processing_unit(inputs::Vector{EOProduct},args::Dict{String,Any})#::YAXArrays.Dataset
     @info "Hello !"
     var1=YAXArray(rand(2,2))
@@ -57,6 +71,14 @@ function run(file::String)
     end
     
     workflow = payload["workflow"]
+    for w in workflow
+        try
+            PayloadWorkflow(w)
+        catch e
+            @error e
+        end
+    end
+    @info workflow
     for pu in workflow
         workflow_inputs = [p for p in inputs if p.name in pu["inputs"]]
         #TODO
