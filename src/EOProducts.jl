@@ -76,9 +76,11 @@ function eoproduct_dataset(path::String)::Dict{String,Dataset}
         ds = Dataset()
         zgroup = zopen(p,consolidated=true)
         for zarray in zgroup.arrays
-            if haskey(zarray.second.attrs,"_FillValue")
-                zarray.second.attrs["missing_value"] = zarray.second.attrs["_FillValue"]
+            if haskey(zarray.second.attrs,"fill_value")
+                zarray.second.attrs["missing_value"] = zarray.second.attrs["fill_value"]
                 # zarray.second.attrs=delete!(zarray.second.attrs,"_FillValue")
+            else
+                zarray.second.attrs["missing_value"] = zarray.second.metadata.fill_value
             end
         end
         try
