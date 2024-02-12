@@ -29,6 +29,7 @@ function iter_groups!(vars::Dict{String,ZArray},z::ZGroup)
     end
 
 end
+
 """
     open_eoproduct(path::String)
 
@@ -48,8 +49,9 @@ function open_eoproduct(path::String)
     return vars
 end
 
+
 """
-    eoproduct_dataset(path::String)
+    eoproduct_dataset(path::String)::Dict{String, Dataset}
 
 Open a Copernicus Zarr product
 returns a Dict{String,Dataset} containing all the Variables stored in the product
@@ -60,7 +62,7 @@ returns a Dict{String,Dataset} containing all the Variables stored in the produc
 julia> d = open_eoproduct("S3SLSLST_20191227T124111_0179_A109_T921.zarr")
 ```
 """
-function eoproduct_dataset(path::String)::Dict{String,Dataset}
+function eoproduct_dataset(path::String)::Dict{String, Dataset}
     # Check path exist
     if !isdir(path)
         @error "Product Path does not exist ", path
